@@ -202,7 +202,7 @@ inline Endianness getHostEndianness() {
 #define PLATFORM_BSWAP32(A) _byteswap_ulong(A)
 // See http://tinyurl.com/hqfuznc
 #if _MSC_VER >= 1900 
-extern "C" { FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
+extern "C" { const FILE __iob_func[3] = { *stdin,*stdout,*stderr }; }
 #endif
 #endif
 

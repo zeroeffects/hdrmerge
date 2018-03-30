@@ -32,7 +32,7 @@ if("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
   find_library(CORESERVICES_LIBRARY CoreServices)
 endif()
 
-include_directories(${OPENEXR_INCLUDE_PATHS})
+include_directories(${OPENEXR_INCLUDE_PATH})
 include_directories(${EXIV2_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(${JPEG_INCLUDE_DIR})
@@ -43,17 +43,23 @@ if("${CMAKE_SYSTEM_NAME}" MATCHES "Windows")
 endif()
 
 # Compile with C++11 features
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-deprecated-declarations -Wno-deprecated-register -Wno-unused-local-typedefs ${CMAKE_CXX_FLAGS}")
+if(NOT WIN32)
+    set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wno-deprecated-declarations -Wno-deprecated-register -Wno-unused-local-typedefs ${CMAKE_CXX_FLAGS}")
+else()
+    add_definitions(-DOPENEXR_DLL)
+endif()
 
 add_definitions(-D_USE_MATH_DEFINES -D_UNICODE -DUNICODE)
 
 add_subdirectory(rawspeed)
 
-if("${CMAKE_SYSTEM_NAME}" MATCHES "Windows")
+if(NOT WIN32)
 	set(PTHREAD_LIBRARY	"${CMAKE_SOURCE_DIR}/rawspeed/lib64/pthreadVC2.lib")
 endif()
 
 add_executable(hdrmerge input.cpp output.cpp main.cpp hdr.cpp fitexp.cpp resample.cpp misc.cpp ${RAWSPEED_SOURCES})
+
+message(${OPENEXR_HALF_LIBRARY})
 
 target_link_libraries(hdrmerge rawspeed ${LIBXML2_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} 
   ${JPEG_LIBRARIES} ${OPENEXR_LIBRARIES} ${EXIV2_LIBRARY}

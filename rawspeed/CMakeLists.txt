@@ -11,6 +11,7 @@ message(STATUS ${RAWSPEED_SOURCES})
 #
 if(WIN32)
   set(RAWSPEED_LIBS "msvcrt")
+  add_definitions("-DNO_PTHREAD")
 else(WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif(WIN32)

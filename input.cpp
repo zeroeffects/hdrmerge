@@ -3,7 +3,9 @@
 #include <mutex>
 #include <algorithm>
 #include <unistd.h>
+#ifndef _WIN32
 #include <libgen.h>
+#endif
 #include <limits.h>
 
 #if defined(__APPLE__)
@@ -22,6 +24,11 @@ using namespace RawSpeed;
 
 static std::unique_ptr<CameraMetaData> __metadata;
 static std::mutex __metadata_mutex;
+
+#if !defined(PATH_MAX) && defined(_WIN32)
+    #define PATH_MAX MAX_PATH
+#endif // !fined(PATH_MAX) && defined(_WIN32)
+
 
 // platform specific function to get exe path
 std::string getexepath() {

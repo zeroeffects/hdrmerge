@@ -11,6 +11,9 @@ extern "C" {
     #include <jerror.h>
 };
 
+#undef min
+#undef max
+
 void writeOpenEXR(const std::string &filename, size_t w, size_t h, int nChannels, float *data, const StringMap &metadata, bool writeHalf) {
     Imf::setGlobalThreadCount(getProcessorCount());
 
